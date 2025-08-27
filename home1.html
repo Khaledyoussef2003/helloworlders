@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPA Calculator</title>
+    <link href="style.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Dancing+Script:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="blob-outer-container">
+        <div class="blob-inner-container">
+          <div class="blob"></div>
+        </div>
+      </div>
+      <div class="main">
+        <h1>GPA </br>Calculator</h1>
+        <div class="subject">
+          <div class="subject__row">
+            <input
+              class="subject__type"
+              id="0-name"
+              placeholder="Subject Name"
+            />
+            <input
+              class="subject__credit"
+              id="0-cr"
+              placeholder="Credit Hours"
+            />
+            <input class="dropbtn" id="0-grade" placeholder="Grade" />
+          </div>
+        </div>
+        <button class="add">+</button>
+        <button class="remove"><img src="delete.png" /></button>
+        <div class="dropdown">
+          <button>SYSTEM</button>
+          <div class="dropdown-content">
+              <button class="option" id="american">AMERICAN</button>
+              <button class="option" id="german">GERMAN</button>
+              <button class="option" id="custom">CUSTOM..</button>
+          </div>
+      </div>
+        <button class="clear">Clear</button>
+        <button class="calculate">Calculate</button>
+        <div class="current-system">Current System:- <a class="system-type"> AMERICAN</a></div>
+      </div>
+      <div class="modal hidden">
+        <button class="close-modal">&times;</button>
+        <h2>Your final GPA is:</h2>
+        <p class="gpa-text"></p>
+      </div>
+      <div class="custom-option hidden">
+        <h3>Customize your weighted GPA</h3>
+        <div class="options-container">
+          <span>A+ <input placeholder="4.0"  id="0"  class="grade-input"></span>
+          <span>A <input placeholder="4.0"  id="1" class="grade-input"></span>
+          <span>A- <input placeholder="3.7" id="2" class="grade-input"></span>
+          <span>B+ <input placeholder="3.3" id="3" class="grade-input"></span>
+          <span>B <input placeholder="3.0" id="4" class="grade-input"></span>
+          <span>B- <input placeholder="2.7" id="5" class="grade-input"></span>
+          <span>C+ <input placeholder="2.3" id="6" class="grade-input"></span>
+          <span>C <input placeholder="2" id="7" class="grade-input"></span>
+          <span>C- <input placeholder="1.7" id="8" class="grade-input"></span>
+          <span>D+ <input placeholder="1.4" id="9" class="grade-input"></span>
+          <span>D <input placeholder="1.0" id="10" class="grade-input"></span>
+          <span>F <input placeholder="0.0" id="11" class="grade-input"></span>
+        </div>
+        <h4 class="error">Weighted GPA must be a valid</h4>
+        <div class="save-div">
+        <button class="save">save
+        </button>
+      </div>
+      <button class="close-options">&times;</button>
+      </div>
+      <div class="overlay hidden"></div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

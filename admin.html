@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KY Cell - Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Admin Panel Specific Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4a00e0;
+            --secondary: #8e2de2;
+            --accent: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --sidebar: #2c3e50;
+            --sidebar-hover: #34495e;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        .sidebar-header h3 {
+            margin-top: 10px;
+        }
+        
+        .sidebar-menu {
+            padding: 10px 0;
+        }
+        
+        .menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: var(--sidebar-hover);
+        }
+        
+        .menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .admin-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        .stat-content {
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-title {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .data-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .data-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        /* Badge Styles */
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+            color: black;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Login Page */
+        .login-container {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .login-form {
+            width: 400px;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        /* Image preview */
+        .image-preview {
+            width: 100px;
+            height: 100px;
+            border: 1px dashed #ddd;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        /* Table image */
+        .table-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .sidebar-header h3, .menu-item span {
+                display: none;
+            }
+            
+            .menu-item {
+                justify-content: center;
+            }
+            
+            .menu-item i {
+                margin-right: 0;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: var(--success);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .toast.error {
+            background: var(--danger);
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page (initially shown) -->
+    <div class="login-container" id="login-page">
+        <div class="login-form">
+            <div class="login-logo">
+                <i class="fas fa-sim-card"></i> KY Cell Admin
+            </div>
+            <form id="login-form" method="POST">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Admin username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Admin password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel (initially hidden) -->
+    <div id="admin-panel" style="display: none; width: 100%;">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-sim-card" style="font-size: 32px;"></i>
+                <h3>KY Cell Admin</h3>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-item active" data-tab="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="menu-item" data-tab="orders">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Orders</span>
+                </div>
+                <div class="menu-item" data-tab="recharge-cards">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Recharge Cards</span>
+                </div>
+                <div class="menu-item" data-tab="data-bundles">
+                    <i class="fas fa-database"></i>
+                    <span>Data Bundles</span>
+                </div>
+                <div class="menu-item" data-tab="gift-cards">
+                    <i class="fas fa-gift"></i>
+                    <span>Gift Cards</span>
+                </div>
+                <div class="menu-item" data-tab="add-card">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Add New Card</span>
+                </div>
+                <div class="menu-item" data-tab="add-bundle">
+                    <i class="fas fa-plus-square"></i>
+                    <span>Add Data Bundle</span>
+                </div>
+                <div class="menu-item" data-tab="add-gift-card">
+                    <i class="fas fa-gift"></i>
+                    <span>Add Gift Card</span>
+                </div>
+                <div class="menu-item" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h2>Admin Dashboard</h2>
+                <div>
+                    <span id="current-date"></span>
+                </div>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(74, 0, 224, 0.1); color: var(--primary);">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="total-orders">0</div>
+                            <div class="stat-title">Total Orders</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(40, 167, 69, 0.1); color: var(--success);">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="completed-orders">0</div>
+                            <div class="stat-title">Completed Orders</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(255, 193, 7, 0.1); color: var(--warning);">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="pending-orders">0</div>
+                            <div class="stat-title">Pending Orders</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(220, 53, 69, 0.1); color: var(--danger);">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="failed-orders">0</div>
+                            <div class="stat-title">Failed Orders</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <h3>Recent Orders</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Item</th>
+                                    <th>Price</th>
+                                    <th>Mobile Number</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-orders">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Tab -->
+            <div class="tab-content" id="orders">
+                <div class="admin-card">
+                    <h3>All Orders</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Item</th>
+                                    <th>Type</th>
+                                    <th>Operator</th>
+                                    <th>Price</th>
+                                    <th>Mobile Number</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="all-orders">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recharge Cards Tab -->
+            <div class="tab-content" id="recharge-cards">
+                <div class="admin-card">
+                    <h3>Recharge Cards</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>ID</th>
+                                    <th>Operator</th>
+                                    <th>Amount</th>
+                                    <th>Price</th>
+                                    <th>Code</th>
+                                    <th>Status</th>
+                                    <th>Date Added</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cards-table">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Bundles Tab -->
+            <div class="tab-content" id="data-bundles">
+                <div class="admin-card">
+                    <h3>Data Bundles</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>ID</th>
+                                    <th>Operator</th>
+                                    <th>Bundle Name</th>
+                                    <th>Price</th>
+                                    <th>Validity</th>
+                                    <th>Date Added</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bundles-table">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gift Cards Tab -->
+            <div class="tab-content" id="gift-cards">
+                <div class="admin-card">
+                    <h3>Gift Cards</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>ID</th>
+                                    <th>Brand</th>
+                                    <th>Amount</th>
+                                    <th>Price</th>
+                                    <th>Code</th>
+                                    <th>Status</th>
+                                    <th>Date Added</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="gift-cards-table">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add New Card Tab -->
+            <div class="tab-content" id="add-card">
+                <div class="admin-card">
+                    <h3>Add New Recharge Card</h3>
+                    <form id="add-card-form" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="action" value="add_card">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="card-operator">Operator</label>
+                                <select id="card-operator" name="operator" required>
+                                    <option value="">Select Operator</option>
+                                    <option value="Touch">Touch</option>
+                                    <option value="Alfa">Alfa</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="card-amount">Amount ($)</label>
+                                <input type="number" id="card-amount" name="amount" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="card-price">Price ($)</label>
+                                <input type="number" id="card-price" name="price" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="card-code">Card Code</label>
+                                <input type="text" id="card-code" name="code" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="card-image">Card Image</label>
+                            <input type="file" id="card-image" name="image" accept="image/*">
+                            <div class="image-preview" id="card-image-preview">
+                                <span>Preview</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Card</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Add Data Bundle Tab -->
+            <div class="tab-content" id="add-bundle">
+                <div class="admin-card">
+                    <h3>Add New Data Bundle</h3>
+                    <form id="add-bundle-form" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="action" value="add_bundle">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bundle-operator">Operator</label>
+                                <select id="bundle-operator" name="operator" required>
+                                    <option value="">Select Operator</option>
+                                    <option value="Touch">Touch</option>
+                                    <option value="Alfa">Alfa</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="bundle-name">Bundle Name</label>
+                                <input type="text" id="bundle-name" name="bundle_name" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bundle-price">Price ($)</label>
+                                <input type="number" id="bundle-price" name="price" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="bundle-validity">Validity</label>
+                                <input type="text" id="bundle-validity" name="validity" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="bundle-image">Bundle Image</label>
+                            <input type="file" id="bundle-image" name="image" accept="image/*">
+                            <div class="image-preview" id="bundle-image-preview">
+                                <span>Preview</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Bundle</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Add Gift Card Tab -->
+            <div class="tab-content" id="add-gift-card">
+                <div class="admin-card">
+                    <h3>Add New Gift Card</h3>
+                    <form id="add-gift-card-form" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="action" value="add_gift_card">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="gift-card-operator">Brand</label>
+                                <input type="text" id="gift-card-operator" name="operator" placeholder="Enter brand name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gift-card-amount">Amount ($)</label>
+                                <input type="number" id="gift-card-amount" name="amount" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="gift-card-price">Price ($)</label>
+                                <input type="number" id="gift-card-price" name="price" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gift-card-code">Card Code</label>
+                                <input type="text" id="gift-card-code" name="code" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-card-image">Gift Card Image</label>
+                            <input type="file" id="gift-card-image" name="image" accept="image/*">
+                            <div class="image-preview" id="gift-card-image-preview">
+                                <span>Preview</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Gift Card</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Admin credentials (in a real application, this would be stored securely on the server)
+        const ADMIN_CREDENTIALS = {
+            username: "admin",
+            password: "kycell2023"
+        };
+
+        // Check if user is logged in
+        function checkAuth() {
+            return localStorage.getItem('adminLoggedIn') === 'true';
+        }
+
+        // Show admin panel if logged in
+        if (checkAuth()) {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'flex';
+            loadDashboardData();
+        }
+
+        // Set current date
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+
+        // Login form submission
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                localStorage.setItem('adminLoggedIn', 'true');
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'flex';
+                loadDashboardData();
+            } else {
+                alert('Invalid username or password');
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            localStorage.removeItem('adminLoggedIn');
+            document.getElementById('login-page').style.display = 'flex';
+            document.getElementById('admin-panel').style.display = 'none';
+        });
+
+        // Tab navigation
+        document.querySelectorAll('.menu-item').forEach(item => {
+            if (item.id !== 'logout-btn') {
+                item.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    // Update header
+                    document.querySelector('.header h2').textContent = this.querySelector('span').textContent + ' Management';
+                    
+                    // Load data for specific tabs
+                    if (tabId === 'orders') {
+                        loadOrdersData();
+                    } else if (tabId === 'recharge-cards') {
+                        loadRechargeCards();
+                    } else if (tabId === 'data-bundles') {
+                        loadDataBundles();
+                    } else if (tabId === 'gift-cards') {
+                        loadGiftCards();
+                    }
+                });
+            }
+        });
+
+        // Image preview functionality
+        function setupImagePreview(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            
+            input.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.innerHTML = '<span>Preview</span>';
+                }
+            });
+        }
+
+        // Set up image previews
+        setupImagePreview('card-image', 'card-image-preview');
+        setupImagePreview('bundle-image', 'bundle-image-preview');
+        setupImagePreview('gift-card-image', 'gift-card-image-preview');
+
+        // Show toast notification
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = isError ? 'toast error' : 'toast';
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Load dashboard data
+        function loadDashboardData() {
+            fetch('admin_api.php?action=dashboard_stats')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('total-orders').textContent = data.total_orders;
+                        document.getElementById('completed-orders').textContent = data.completed_orders;
+                        document.getElementById('pending-orders').textContent = data.pending_orders;
+                        document.getElementById('failed-orders').textContent = data.failed_orders;
+                        
+                        const recentOrdersTable = document.getElementById('recent-orders');
+                        recentOrdersTable.innerHTML = '';
+                        
+                        if (data.recent_orders && data.recent_orders.length > 0) {
+                            data.recent_orders.forEach(order => {
+                                const row = document.createElement('tr');
+                                
+                                // Handle cases where payment_status might not exist
+                                let status = order.payment_status || 'paid'; // Default to 'paid' if not exists
+                                let statusClass = 'badge-warning';
+                                if (status === 'paid') statusClass = 'badge-success';
+                                if (status === 'failed') statusClass = 'badge-danger';
+                                
+                                row.innerHTML = `
+                                    <td>#${order.id}</td>
+                                    <td>${order.item_name}</td>
+                                    <td>$${order.price}</td>
+                                    <td>${order.mobile_number || 'N/A'}</td>
+                                    <td><span class="badge ${statusClass}">${status}</span></td>
+                                    <td>${order.created_at}</td>
+                                `;
+                                
+                                recentOrdersTable.appendChild(row);
+                            });
+                        } else {
+                            recentOrdersTable.innerHTML = '<tr><td colspan="6" style="text-align: center;">No recent orders</td></tr>';
+                        }
+                    } else {
+                        showToast('Error loading dashboard data: ' + (data.message || 'Unknown error'), true);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Error loading dashboard data. Check console for details.', true);
+                });
+        }
+
+        // Load orders data
+        function loadOrdersData() {
+            fetch('admin_api.php?action=get_orders')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const ordersTable = document.getElementById('all-orders');
+                        ordersTable.innerHTML = '';
+                        
+                        data.orders.forEach(order => {
+                            const row = document.createElement('tr');
+                            
+                            let statusClass = 'badge-warning';
+                            if (order.payment_status === 'paid') statusClass = 'badge-success';
+                            if (order.payment_status === 'failed') statusClass = 'badge-danger';
+                            
+                            row.innerHTML = `
+                                <td>#${order.id}</td>
+                                <td>${order.item_name}</td>
+                                <td>${order.item_type || 'N/A'}</td>
+                                <td>${order.operator || 'N/A'}</td>
+                                <td>$${order.price}</td>
+                                <td>${order.mobile_number || 'N/A'}</td>
+                                <td><span class="badge ${statusClass}">${order.payment_status}</span></td>
+                                <td>${order.created_at}</td>
+                                <td>
+                                    <button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">View</button>
+                                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteOrder(${order.id})">Delete</button>
+                                </td>
+                            `;
+                            
+                            ordersTable.appendChild(row);
+                        });
+                    } else {
+                        showToast('Error loading orders', true);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Error loading orders', true);
+                });
+        }
+
+        // Load recharge cards
+        function loadRechargeCards() {
+            fetch('admin_api.php?action=get_cards')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const cardsTable = document.getElementById('cards-table');
+                        cardsTable.innerHTML = '';
+                        
+                        data.cards.forEach(card => {
+                            const row = document.createElement('tr');
+                            
+                            const statusClass = card.status === 'available' ? 'badge-success' : 'badge-secondary';
+                            const imageUrl = card.image || 'https://via.placeholder.com/50';
+                            
+                            row.innerHTML = `
+                                <td><img src="${imageUrl}" alt="Card" class="table-image"></td>
+                                <td>${card.id}</td>
+                                <td>${card.operator}</td>
+                                <td>$${card.amount}</td>
+                                <td>$${card.price || card.amount}</td>
+                                <td>${card.code}</td>
+                                <td><span class="badge ${statusClass}">${card.status}</span></td>
+                                <td>${card.created_at}</td>
+                                <td>
+                                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteCard(${card.id}, 'recharge')">Delete</button>
+                                </td>
+                            `;
+                            
+                            cardsTable.appendChild(row);
+                        });
+                    } else {
+                        showToast('Error loading recharge cards', true);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Error loading recharge cards', true);
+                });
+        }
+
+        // Load data bundles
+        function loadDataBundles() {
+            fetch('admin_api.php?action=get_bundles')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const bundlesTable = document.getElementById('bundles-table');
+                        bundlesTable.innerHTML = '';
+                        
+                        data.bundles.forEach(bundle => {
+                            const row = document.createElement('tr');
+                            
+                            const imageUrl = bundle.image || 'https://via.placeholder.com/50';
+                            
+                            row.innerHTML = `
+                                <td><img src="${imageUrl}" alt="Bundle" class="table-image"></td>
+                                <td>${bundle.id}</td>
+                                <td>${bundle.operator}</td>
+                                <td>${bundle.bundle_name}</td>
+                                <td>$${bundle.price}</td>
+                                <td>${bundle.validity}</td>
+                                <td>${bundle.created_at}</td>
+                                <td>
+                                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteBundle(${bundle.id})">Delete</button>
+                                </td>
+                            `;
+                            
+                            bundlesTable.appendChild(row);
+                        });
+                    } else {
+                        showToast('Error loading data bundles', true);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Error loading data bundles', true);
+                });
+        }
+
+        // Load gift cards
+        function loadGiftCards() {
+            fetch('admin_api.php?action=get_gift_cards')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const giftCardsTable = document.getElementById('gift-cards-table');
+                        giftCardsTable.innerHTML = '';
+                        
+                        data.gift_cards.forEach(card => {
+                            const row = document.createElement('tr');
+                            
+                            const statusClass = card.status === 'available' ? 'badge-success' : 'badge-secondary';
+                            const imageUrl = card.image || 'https://via.placeholder.com/50';
+                            
+                            row.innerHTML = `
+                                <td><img src="${imageUrl}" alt="Gift Card" class="table-image"></td>
+                                <td>${card.id}</td>
+                                <td>${card.operator}</td>
+                                <td>$${card.amount}</td>
+                                <td>$${card.price || card.amount}</td>
+                                <td>${card.code}</td>
+                                <td><span class="badge ${statusClass}">${card.status}</span></td>
+                                <td>${card.created_at}</td>
+                                <td>
+                                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteCard(${card.id}, 'gift')">Delete</button>
+                                </td>
+                            `;
+                            
+                            giftCardsTable.appendChild(row);
+                        });
+                    } else {
+                        showToast('Error loading gift cards', true);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Error loading gift cards', true);
+                });
+        }
+
+        // Delete functions
+        function deleteOrder(id) {
+            if (confirm('Are you sure you want to delete this order?')) {
+                fetch('admin_api.php?action=delete_order&id=' + id)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showToast('Order deleted successfully');
+                            loadOrdersData();
+                        } else {
+                            showToast('Error deleting order', true);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showToast('Error deleting order', true);
+                    });
+            }
+        }
+
+        function deleteCard(id, type) {
+            if (confirm('Are you sure you want to delete this card?')) {
+                fetch('admin_api.php?action=delete_card&id=' + id + '&type=' + type)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showToast('Card deleted successfully');
+                            if (type === 'recharge') {
+                                loadRechargeCards();
+                            } else {
+                                loadGiftCards();
+                            }
+                        } else {
+                            showToast('Error deleting card', true);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showToast('Error deleting card', true);
+                    });
+            }
+        }
+
+        function deleteBundle(id) {
+            if (confirm('Are you sure you want to delete this data bundle?')) {
+                fetch('admin_api.php?action=delete_bundle&id=' + id)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showToast('Data bundle deleted successfully');
+                            loadDataBundles();
+                        } else {
+                            showToast('Error deleting data bundle', true);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showToast('Error deleting data bundle', true);
+                    });
+            }
+        }
+
+        // Form submissions
+        document.getElementById('add-card-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('admin_api.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Card added successfully');
+                    this.reset();
+                    document.getElementById('card-image-preview').innerHTML = '<span>Preview</span>';
+                } else {
+                    showToast('Error adding card: ' + (data.message || 'Unknown error'), true);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Error adding card', true);
+            });
+        });
+
+        document.getElementById('add-bundle-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('admin_api.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Data bundle added successfully');
+                    this.reset();
+                    document.getElementById('bundle-image-preview').innerHTML = '<span>Preview</span>';
+                } else {
+                    showToast('Error adding data bundle: ' + (data.message || 'Unknown error'), true);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Error adding data bundle', true);
+            });
+        });
+
+        document.getElementById('add-gift-card-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('admin_api.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Gift card added successfully');
+                    this.reset();
+                    document.getElementById('gift-card-image-preview').innerHTML = '<span>Preview</span>';
+                } else {
+                    showToast('Error adding gift card: ' + (data.message || 'Unknown error'), true);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Error adding gift card', true);
+            });
+        });
+    </script>
+</body>
+</html>

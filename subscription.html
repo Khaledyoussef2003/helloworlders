@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Page</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: #1d1d1d;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+    .subscription-container {
+        background-color: #333;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    h1 {
+        color: #ffd700;
+    }
+    p {
+        margin: 10px 0;
+    }
+    button {
+        background-color: #ffd700;
+        color: #000;
+        border: none;
+        padding: 10px 20px;
+        margin: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #e5c600;
+    }
+</style>
+<body>
+    <h1>Subscribe for $5/month</h1>
+    <form action="subscription.php" method="POST">
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="twelve_digit_code">Enter 12-digit code:</label><br>
+        <input type="text" id="twelve_digit_code" name="twelve_digit_code" maxlength="12" required><br><br>
+
+        <button type="submit">Subscribe</button>
+    </form>
+</body>
+</html>
+

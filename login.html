@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - OneShoot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #1d1d1d;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            width: 100%;
+            background-color: #1d1d1d;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .container {
+            flex-grow: 1;
+            text-align: center;
+            padding: 20px;
+        }
+        input, button {
+            width: 50%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #ffd700;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        footer {
+            width: 100%;
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .rights {
+            font-size: 12px;
+            color: #bbb;
+        }
+    </style>
+
+    <script>
+        function login() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    // Fetch stored credentials
+    const storedEmail = localStorage.getItem('email');
+    const storedPassword = localStorage.getItem('password');
+
+    if (email === storedEmail && password === storedPassword) {
+        alert('Login successful!');
+        showLoggedInView(); // Function to update the UI for logged-in users
+    } else {
+        alert('Invalid email or password');
+    }
+}
+
+function showLoggedInView() {
+    window.location.href = "index.php";
+    document.getElementById('navButtons').classList.add('hidden'); // Hide login and signup buttons
+    document.getElementById('logoutButton').classList.remove('hidden'); // Show logout button
+}
+
+// Logout functionality
+function logout() {
+    alert('Logged out successfully.');
+    localStorage.removeItem('email');
+    localStorage.removeItem('password');
+    location.reload(); // Reload page to reset to login view
+}
+
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Login to OneShoot</h1>
+    </header>
+
+    <div class="container">
+        <div class="container">
+            <form method="POST" action="login.php">
+                <input type="email" id="loginEmail" placeholder="Email" name="email" required>
+                <input type="password" id="loginPassword" placeholder="Password" name="password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="signup.html" class="link">Sign Up</a></p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="rights">© 2024 OneShoot. All rights reserved.</div>
+    </footer>
+</body>
+</html>
